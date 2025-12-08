@@ -3,6 +3,13 @@ import torch.nn as nn
 import torch.nn.functional as F
 from PIL import Image
 import numpy as np
+import argparse
+
+def parse_args():
+    parser = argparse.ArgumentParser(description="MNIST Digit Classifier")
+    parser.add_argument("--image", type=str, required=True,
+                        help="Path to the input image")
+    return parser.parse_args()
 
 best_model_path="best_model.pth"
 
@@ -59,7 +66,9 @@ def load_trained_model(model_path, device):
     return model
 
 if __name__=="__main__":
+    args = parse_args()
+    image_path = args.image
+    
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     model=load_trained_model(best_model_path, device)
-    image_path=input("Input Image Path : ")
     print(f"The digit in image is : {predict_digit(image_path, model, device)}")
